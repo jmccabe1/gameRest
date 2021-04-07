@@ -1,6 +1,7 @@
 package com.example.gameProject.Service;
 
 
+import com.example.gameProject.Helper.GameHelper;
 import com.example.gameProject.Repository.GameRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +11,12 @@ import org.springframework.stereotype.Service;
 public class GameServiceIMPL implements GameService{
     @Autowired
     private GameRepository gameRepository;
+    @Autowired
+    private GameHelper gameHelper;
 
     @Override
     public String gameInfo() {
-        ObjectId id = new ObjectId("606bd26be43685d583c36871");
-        return gameRepository.findBy_id(id).gameStatus;
+        return gameHelper.getGame("606bd26be43685d583c36871").gameStatus;
     }
 
     @Override
