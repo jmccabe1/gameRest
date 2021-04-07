@@ -15,7 +15,7 @@ public class GameServiceIMPL implements GameService{
     private GameHelper gameHelper;
 
     @Override
-    public String gameInfo() {
+    public String gameInfo() throws Exception {
         return gameHelper.getGame("606bd26be43685d583c36871").gameStatus;
     }
 
