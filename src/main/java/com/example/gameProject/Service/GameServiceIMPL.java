@@ -8,6 +8,8 @@ import com.example.gameProject.Repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 public class GameServiceIMPL implements GameService{
     @Autowired
@@ -17,17 +19,20 @@ public class GameServiceIMPL implements GameService{
 
     @Override
     public String gameInfo() throws Exception {
-        return gameHelper.getGame("606bd26be43685d583c36871").gameStatus;
+        return gameHelper.getGame("606bd26be43685d583c36871").getGameStatus();
     }
 
     @Override
     public String gameStatus(String gameID) throws Exception {
-        return gameHelper.getGame(gameID).gameStatus;
+        return gameHelper.getGame(gameID).getGameStatus();
     }
 
     @Override
     public Game createGame() {
         Game newGame = new Game();
+        newGame.setGameStatus("ONLINE");
+        newGame.setPlayers(new ArrayList<>());
+        newGame.getPlayers().add("Jesus");
         return gameRepository.save(newGame);
     }
 
@@ -37,7 +42,17 @@ public class GameServiceIMPL implements GameService{
             return gameHelper.getGame(gameID);
         }
         Game workableGame = gameHelper.getGame(gameID);
-        workableGame.gameStatus = gameUpdateRequest.getGameStatus();
+        workableGame.setGameStatus(gameUpdateRequest.getGameStatus());
         return gameRepository.save(workableGame);
+    }
+
+    @Override
+    public Game joinGame(String gameID, String playerID) throws Exception {
+        if (!gameHelper.getGame(gameID).getPlayers().contains(playerID)) {
+            Game workableGame = gameHelper.getGame(gameID);
+            workableGame.getPlayers().add(playerID);
+            return gameRepository.save(workableGame);
+        }
+        return null;
     }
 }

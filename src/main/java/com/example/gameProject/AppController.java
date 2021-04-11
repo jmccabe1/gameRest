@@ -34,4 +34,10 @@ public class AppController {
         return gameService.updateGame(gameUpdateRequest, gameID);
     }
 
+    @PutMapping("/api/v1/game/{gameID}/join")
+    public Game joinGame(@PathVariable("gameID") String gameID,
+    @RequestBody String playerID) throws Exception {
+        return gameService.joinGame(gameID, playerID);
+    }
+
 }

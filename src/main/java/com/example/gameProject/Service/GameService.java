@@ -4,8 +4,9 @@ import com.example.gameProject.Model.Game;
 import com.example.gameProject.ModelAPI.GameUpdateRequest;
 
 public interface GameService {
-    public String gameInfo() throws Exception;
-    public String gameStatus(String gameID) throws Exception;
-    public Game createGame();
-    public Game updateGame(GameUpdateRequest gameUpdateRequest, String gameID) throws Exception;
+     String gameInfo() throws Exception;
+     String gameStatus(String gameID) throws Exception;
+     Game createGame();
+     Game updateGame(GameUpdateRequest gameUpdateRequest, String gameID) throws Exception;
+     Game joinGame(String gameID, String playerID) throws Exception;
 }
