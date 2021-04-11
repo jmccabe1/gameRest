@@ -2,8 +2,9 @@ package com.example.gameProject.Service;
 
 
 import com.example.gameProject.Helper.GameHelper;
+import com.example.gameProject.Model.Game;
+import com.example.gameProject.ModelAPI.GameUpdateRequest;
 import com.example.gameProject.Repository.GameRepository;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,17 +21,23 @@ public class GameServiceIMPL implements GameService{
     }
 
     @Override
-    public String gameStatus() {
-        return "Get Game Status";
+    public String gameStatus(String gameID) throws Exception {
+        return gameHelper.getGame(gameID).gameStatus;
     }
 
     @Override
-    public String createGame() {
-        return "Create Game";
+    public Game createGame() {
+        Game newGame = new Game();
+        return gameRepository.save(newGame);
     }
 
     @Override
-    public String startGame() {
-        return "Start Game, Make Your First Move";
+    public Game updateGame(GameUpdateRequest gameUpdateRequest, String gameID) throws Exception {
+        if (gameUpdateRequest.getGameStatus() == null) {
+            return gameHelper.getGame(gameID);
+        }
+        Game workableGame = gameHelper.getGame(gameID);
+        workableGame.gameStatus = gameUpdateRequest.getGameStatus();
+        return gameRepository.save(workableGame);
     }
 }
