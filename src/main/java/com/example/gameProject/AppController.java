@@ -2,8 +2,10 @@ package com.example.gameProject;
 
 
 import com.example.gameProject.Model.Game;
+import com.example.gameProject.ModelAPI.CreateBoardRequest;
 import com.example.gameProject.ModelAPI.GameUpdateRequest;
 import com.example.gameProject.Service.GameService;
+import com.example.gameProject.Service.GameServiceIMPL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,20 +26,25 @@ public class AppController {
 
 
     @PostMapping("/api/v1/game")
-    public Game createGame(){
+    public Game createGame() {
         return gameService.createGame();
     }
 
     @PutMapping("/api/v1/game/{gameID}")
     public Game updateGame(@PathVariable("gameID") String gameID,
-    @RequestBody GameUpdateRequest gameUpdateRequest) throws Exception {
+                           @RequestBody GameUpdateRequest gameUpdateRequest) throws Exception {
         return gameService.updateGame(gameUpdateRequest, gameID);
     }
 
     @PutMapping("/api/v1/game/{gameID}/join")
     public Game joinGame(@PathVariable("gameID") String gameID,
-    @RequestBody String playerID) throws Exception {
+                         @RequestBody String playerID) throws Exception {
         return gameService.joinGame(gameID, playerID);
     }
 
+    @PostMapping("/api/v1/game/{gameID}/board")
+    public void setBoard(@PathVariable("gameID") String gameID,
+                         @RequestBody CreateBoardRequest createBoardRequest) throws Exception {
+        gameService.setBoard(gameID, createBoardRequest);
+    }
 }

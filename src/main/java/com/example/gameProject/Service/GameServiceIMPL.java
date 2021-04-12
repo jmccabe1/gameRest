@@ -3,12 +3,16 @@ package com.example.gameProject.Service;
 
 import com.example.gameProject.Helper.GameHelper;
 import com.example.gameProject.Model.Game;
+import com.example.gameProject.Model.GameBoardState;
+import com.example.gameProject.ModelAPI.CreateBoardRequest;
 import com.example.gameProject.ModelAPI.GameUpdateRequest;
 import com.example.gameProject.Repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class GameServiceIMPL implements GameService{
@@ -54,5 +58,25 @@ public class GameServiceIMPL implements GameService{
             return gameRepository.save(workableGame);
         }
         return null;
+    }
+
+    @Override
+    public void setBoard(String gameID, CreateBoardRequest createBoardRequest) throws Exception {
+        Game foundGame = gameHelper.getGame(gameID);
+        List<GameBoardState> relevantBoard = foundGame.getBoardSetup()
+                .stream()
+                .filter(c -> c.getPlayerID() == createBoardRequest.getPlayerID())
+                .collect(Collectors.toList());
+        if (relevantBoard.size() == 0) {
+            GameBoardState newBoard = new GameBoardState();
+            newBoard.setPlayerID(createBoardRequest.getPlayerID());
+            newBoard.setPlayerTargets(createBoardRequest.getPlayerTargets());
+            foundGame.getBoardSetup().add(newBoard);
+        }
+        else {
+            relevantBoard.get(0).setPlayerID(createBoardRequest.getPlayerID());
+            relevantBoard.get(0).setPlayerTargets(createBoardRequest.getPlayerTargets());
+        }
+        gameRepository.save(foundGame);
     }
 }

@@ -14,5 +14,5 @@ public class Game {
     private ObjectId _id;
     private List<String> players;
     private String gameStatus;
-
+    List<GameBoardState> boardSetup;
 }
