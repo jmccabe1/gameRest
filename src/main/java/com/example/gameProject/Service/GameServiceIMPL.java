@@ -37,6 +37,7 @@ public class GameServiceIMPL implements GameService{
         newGame.setGameStatus("ONLINE");
         newGame.setPlayers(new ArrayList<>());
         newGame.getPlayers().add("Jesus");
+        newGame.setBoardSetup(new ArrayList<>());
         return gameRepository.save(newGame);
     }
 
@@ -65,7 +66,7 @@ public class GameServiceIMPL implements GameService{
         Game foundGame = gameHelper.getGame(gameID);
         List<GameBoardState> relevantBoard = foundGame.getBoardSetup()
                 .stream()
-                .filter(c -> c.getPlayerID() == createBoardRequest.getPlayerID())
+                .filter(c -> c.getPlayerID().equals(createBoardRequest.getPlayerID()))
                 .collect(Collectors.toList());
         if (relevantBoard.size() == 0) {
             GameBoardState newBoard = new GameBoardState();
