@@ -4,8 +4,9 @@ package com.example.gameProject;
 import com.example.gameProject.Model.Game;
 import com.example.gameProject.ModelAPI.CreateBoardRequest;
 import com.example.gameProject.ModelAPI.GameUpdateRequest;
+import com.example.gameProject.ModelAPI.PlayerMoveRequest;
+import com.example.gameProject.ModelAPI.PlayerMoveResponse;
 import com.example.gameProject.Service.GameService;
-import com.example.gameProject.Service.GameServiceIMPL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,5 +47,11 @@ public class AppController {
     public void setBoard(@PathVariable("gameID") String gameID,
                          @RequestBody CreateBoardRequest createBoardRequest) throws Exception {
         gameService.setBoard(gameID, createBoardRequest);
+    }
+
+    @PutMapping("/api/v1/game/{gameID}/board")
+    public PlayerMoveResponse playerMove(@PathVariable("gameID") String gameID,
+            @RequestBody PlayerMoveRequest playerMoveRequest) throws Exception {
+        return gameService.playerMove(gameID, playerMoveRequest);
     }
 }

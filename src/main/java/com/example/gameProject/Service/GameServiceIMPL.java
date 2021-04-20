@@ -2,10 +2,11 @@ package com.example.gameProject.Service;
 
 
 import com.example.gameProject.Helper.GameHelper;
-import com.example.gameProject.Model.Game;
-import com.example.gameProject.Model.GameBoardState;
+import com.example.gameProject.Model.*;
 import com.example.gameProject.ModelAPI.CreateBoardRequest;
 import com.example.gameProject.ModelAPI.GameUpdateRequest;
+import com.example.gameProject.ModelAPI.PlayerMoveRequest;
+import com.example.gameProject.ModelAPI.PlayerMoveResponse;
 import com.example.gameProject.Repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -79,5 +80,37 @@ public class GameServiceIMPL implements GameService{
             relevantBoard.get(0).setPlayerTargets(createBoardRequest.getPlayerTargets());
         }
         gameRepository.save(foundGame);
+    }
+
+    @Override
+    public PlayerMoveResponse playerMove(String gameID, PlayerMoveRequest playerMoveRequest) throws Exception {
+        PlayerMoveResponse x = new PlayerMoveResponse();
+        //
+        Game foundGame = gameHelper.getGame(gameID);
+        List<GameBoardState> defenderBoard = foundGame.getBoardSetup()
+                .stream()
+                .filter(c -> c.getPlayerID().equals(playerMoveRequest.getDefendingPlayerID()))
+                .collect(Collectors.toList());
+        for (PlayerTarget defendingTargets : defenderBoard.get(0).getPlayerTargets()) {
+            for (TargetPosition targetPosition : defendingTargets.getTargetPosition()){
+                if (targetPosition.getX() == playerMoveRequest.getTarget().getX()
+                        &&
+                        targetPosition.getY() == playerMoveRequest.getTarget().getY()) {
+                    targetPosition.setWasHit(true);
+                    x.setWasHit(true);
+                }
+            }
+        }
+        List<GameBoardState> attackerBoard = foundGame.getBoardSetup()
+                .stream()
+                .filter(c -> c.getPlayerID().equals(playerMoveRequest.getAttackingPlayerID()))
+                .collect(Collectors.toList());
+            PlayerAttack e = new PlayerAttack();
+            e.setTargetedPlayer(playerMoveRequest.getDefendingPlayerID());
+            e.setTargets(playerMoveRequest.getTarget());
+            attackerBoard.get(0).getPlayerAttacks().add(e);
+        gameRepository.save(foundGame);
+        //
+        return x;
     }
 }
