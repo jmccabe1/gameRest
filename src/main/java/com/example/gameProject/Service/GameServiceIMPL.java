@@ -85,7 +85,6 @@ public class GameServiceIMPL implements GameService{
     @Override
     public PlayerMoveResponse playerMove(String gameID, PlayerMoveRequest playerMoveRequest) throws Exception {
         PlayerMoveResponse x = new PlayerMoveResponse();
-        //
         Game foundGame = gameHelper.getGame(gameID);
         List<GameBoardState> defenderBoard = foundGame.getBoardSetup()
                 .stream()
@@ -110,7 +109,23 @@ public class GameServiceIMPL implements GameService{
             e.setTargets(playerMoveRequest.getTarget());
             attackerBoard.get(0).getPlayerAttacks().add(e);
         gameRepository.save(foundGame);
-        //
+        x.setHaveYouWon(detectWin(playerMoveRequest.getAttackingPlayerID(), foundGame));
         return x;
+    }
+
+    private boolean detectWin(String winningPlayer, Game endingGame) {
+        boolean haveYouWon = true;
+        for (GameBoardState checkingBoards : endingGame.getBoardSetup()) {
+            if (!checkingBoards.getPlayerID().equals(winningPlayer)){
+                for (PlayerTarget nonPlayerBoards : checkingBoards.getPlayerTargets()) {
+                    for (TargetPosition nonPlayerTargets : nonPlayerBoards.getTargetPosition()) {
+                        if (!nonPlayerTargets.isWasHit()){
+                            haveYouWon = false;
+                        }
+                    }
+                }
+            }
+        }
+        return haveYouWon;
     }
 }
