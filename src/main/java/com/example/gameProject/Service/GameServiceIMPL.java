@@ -119,8 +119,9 @@ public class GameServiceIMPL implements GameService{
             if (!checkingBoards.getPlayerID().equals(winningPlayer)){
                 for (PlayerTarget nonPlayerBoards : checkingBoards.getPlayerTargets()) {
                     for (TargetPosition nonPlayerTargets : nonPlayerBoards.getTargetPosition()) {
-                        if (!nonPlayerTargets.isWasHit()){
+                        if (!nonPlayerTargets.isWasHit()) {
                             haveYouWon = false;
+                            break;
                         }
                     }
                 }
