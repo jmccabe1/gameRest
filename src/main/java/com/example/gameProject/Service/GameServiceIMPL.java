@@ -3,10 +3,7 @@ package com.example.gameProject.Service;
 
 import com.example.gameProject.Helper.GameHelper;
 import com.example.gameProject.Model.*;
-import com.example.gameProject.ModelAPI.CreateBoardRequest;
-import com.example.gameProject.ModelAPI.GameUpdateRequest;
-import com.example.gameProject.ModelAPI.PlayerMoveRequest;
-import com.example.gameProject.ModelAPI.PlayerMoveResponse;
+import com.example.gameProject.ModelAPI.*;
 import com.example.gameProject.Repository.GameRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,11 +30,11 @@ public class GameServiceIMPL implements GameService{
     }
 
     @Override
-    public Game createGame() {
+    public Game createGame(CreateGameRequest createGameRequest) {
         Game newGame = new Game();
         newGame.setGameStatus("ONLINE");
         newGame.setPlayers(new ArrayList<>());
-        newGame.getPlayers().add("Jesus");
+        newGame.getPlayers().add(createGameRequest.getPlayerID());
         newGame.setBoardSetup(new ArrayList<>());
         return gameRepository.save(newGame);
     }

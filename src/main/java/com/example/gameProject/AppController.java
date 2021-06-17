@@ -2,10 +2,7 @@ package com.example.gameProject;
 
 
 import com.example.gameProject.Model.Game;
-import com.example.gameProject.ModelAPI.CreateBoardRequest;
-import com.example.gameProject.ModelAPI.GameUpdateRequest;
-import com.example.gameProject.ModelAPI.PlayerMoveRequest;
-import com.example.gameProject.ModelAPI.PlayerMoveResponse;
+import com.example.gameProject.ModelAPI.*;
 import com.example.gameProject.Service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,10 +22,12 @@ public class AppController {
         return gameService.gameStatus(gameID);
     }
 
-
+    @CrossOrigin(origins="http://localhost:3000")
     @PostMapping("/api/v1/game")
-    public Game createGame() {
-        return gameService.createGame();
+    public Game createGame(
+            @RequestBody CreateGameRequest createGameRequest) throws Exception
+     {
+        return gameService.createGame(createGameRequest);
     }
 
     @PutMapping("/api/v1/game/{gameID}")
