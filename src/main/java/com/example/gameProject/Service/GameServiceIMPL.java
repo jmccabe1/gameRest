@@ -30,13 +30,17 @@ public class GameServiceIMPL implements GameService{
     }
 
     @Override
-    public Game createGame(CreateGameRequest createGameRequest) {
+    public GameID createGame(CreateGameRequest createGameRequest) {
         Game newGame = new Game();
         newGame.setGameStatus("ONLINE");
         newGame.setPlayers(new ArrayList<>());
         newGame.getPlayers().add(createGameRequest.getPlayerID());
         newGame.setBoardSetup(new ArrayList<>());
-        return gameRepository.save(newGame);
+        Game returnable = gameRepository.save(newGame);
+        GameID gameID = new GameID();
+        String solution = returnable.get_id().toString();
+        gameID.setGameID(solution);
+        return gameID;
     }
 
     @Override

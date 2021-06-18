@@ -2,6 +2,7 @@ package com.example.gameProject;
 
 
 import com.example.gameProject.Model.Game;
+import com.example.gameProject.Model.GameID;
 import com.example.gameProject.ModelAPI.*;
 import com.example.gameProject.Service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class AppController {
 
     @CrossOrigin(origins="http://localhost:3000")
     @PostMapping("/api/v1/game")
-    public Game createGame(
+    public GameID createGame(
             @RequestBody CreateGameRequest createGameRequest) throws Exception
      {
         return gameService.createGame(createGameRequest);
