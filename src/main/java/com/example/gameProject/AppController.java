@@ -18,6 +18,7 @@ public class AppController {
         return gameService.gameInfo();
     }
 
+    @CrossOrigin(origins="http://localhost:3000")
     @GetMapping("/api/v1/game/{gameID}/status")
     public String gameStatus(@PathVariable("gameID") String gameID) throws Exception {
         return gameService.gameStatus(gameID);
@@ -37,6 +38,7 @@ public class AppController {
         return gameService.updateGame(gameUpdateRequest, gameID);
     }
 
+    @CrossOrigin(origins="http://localhost:3000")
     @PutMapping("/api/v1/game/{gameID}/join")
     public Game joinGame(@PathVariable("gameID") String gameID,
                          @RequestBody String playerID) throws Exception {
